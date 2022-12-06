@@ -1,0 +1,10 @@
+name: Handle issues
+# workflow is triggered when something issue-related happens in repo
+on: issues
+jobs:
+  output-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output event details
+        # access event property of github context object
+        run: echo "${{ toJSON(github.event) }}"
