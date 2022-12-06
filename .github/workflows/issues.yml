@@ -7,4 +7,5 @@ jobs:
     steps:
       - name: Output event details
         # access event property of github context object
+        # in real case: you could use event data to do something with it
         run: echo "${{ toJSON(github.event) }}"
