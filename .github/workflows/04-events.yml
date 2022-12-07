@@ -1,0 +1,42 @@
+# name: Events Demo 1
+# on:
+#   # Events with more control about when they are triggered
+#   pull_request:
+#     # activity types
+#     # - opened -> this notation also works
+#     types: [opened, synchronize, edited]
+#     # target branches of a pull request
+#     branches:
+#       - main
+#       - 'dev-*' # all branches starting with 'dev-' and characters behind (except slashes)
+#       - 'feature/**' # all branches starting with 'feature/' and any combination of characters and slashes after
+#   # notice: colon is mandatory, even if no more details defined below
+#   workflow_dispatch:
+#   push:
+#     # filters
+#     # filter patterns cheat sheet: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#patterns-to-match-branches-and-tags
+#     branches:
+#       - main
+#       - 'dev-*'
+#       - 'feature/**'
+#     branches-ignore:
+#       - 'foo/**'
+#     # filters based on file paths: runs workflow if commit changes file(s) in specific path(s) or except specific path(s)
+#     paths-ignore:
+#       - '.github/workflows/*' # triggers only if NO file changed in this path
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Output event data
+#         run: echo "${{ toJSON(github.event) }}"
+#       - name: Get code
+#         uses: actions/checkout@v3
+#       - name: Install dependencies
+#         run: npm ci
+#       - name: Test code
+#         run: npm run test
+#       - name: Build code
+#         run: npm run build
+#       - name: Deploy project
+#         run: echo "Deploying ..."
