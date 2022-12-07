@@ -4,17 +4,8 @@ on:
     branches:
       - main
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Install dependencies
-        run: npm ci
-      - name: Lint code
-        run: npm run lint
-      - name: Test code
-        run: npm run test
+  # test:
+  # ... not included here
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -30,15 +21,28 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          # give artifact a name
+          # give artifact a name -> can be downloaded manually in GitHub -> Actions ...
           name: dist-files
+          # define path of your repo to be stored
+          path: dist
           # define multiple path (-> use | for multiline instructions) to be stored
-          path: |
-            dist
-            package.json
+          # path: |
+          #   dist
+          #   package.json
   deploy:
+    # need to run after build step that artifact is ready to use
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # take artifacts of previous job
+      # actions/download-artifact
+      - name: Get build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          # identifier for which artifact to download, unzip and directly navigate into this folder
+          name: dist-files
+      - name: Output contents
+        # only to show that you are directly navigated into dist folder of artifact
+        run: ls
       - name: Deploy
         run: echo "Deploying..."
