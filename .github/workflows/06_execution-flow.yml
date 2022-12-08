@@ -89,7 +89,7 @@ jobs:
     # only executed if any other job or step failed
     if: failure()
     runs-on: ubuntu-latest
-    step:
+    steps:
       - name: Output information
         run: |
           echo "Something went wrong"
