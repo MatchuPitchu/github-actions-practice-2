@@ -41,7 +41,7 @@ jobs:
           # path: |
           #   dist
           #   package.json
-  deploy:-
+  deploy:
     # need to run after build step that artifact is ready to use
     needs: build
     runs-on: ubuntu-latest
