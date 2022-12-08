@@ -7,7 +7,6 @@ jobs:
   # test:
   # ... not included here
   build:
-    needs: test
     runs-on: ubuntu-latest
     # define that this job will have an output (i.e. value(s))
     outputs:
