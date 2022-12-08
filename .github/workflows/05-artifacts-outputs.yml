@@ -9,6 +9,11 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    # define that this job will have an output (i.e. value(s))
+    outputs:
+      # custom identifier key, using special 'steps' context object, use your defined id (look below)
+      # to access your value
+      script-file: ${{ steps.publish.outputs.foo }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -16,6 +21,13 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
+      - name: Publish JS filename
+        id: publish
+        # Linux Command to find name of JS file in assets folder and print it
+        # to store this file name, add "foo=" before output value (here "{}")
+        # and add >> $GITHUB_OUTPUT after value (targets special file that GitHub creats in your environment
+        # where output key value pair is written to)
+        run: find dist/assets/*.js -type f -execdir echo 'foo={}' >> $GITHUB_OUTPUT ';'
       # Store output (-> job artifact) using available upload-artifact action
       # https://github.com/actions/upload-artifact
       - name: Upload artifacts
@@ -29,7 +41,7 @@ jobs:
           # path: |
           #   dist
           #   package.json
-  deploy:
+  deploy:-
     # need to run after build step that artifact is ready to use
     needs: build
     runs-on: ubuntu-latest
@@ -44,5 +56,8 @@ jobs:
       - name: Output contents
         # only to show that you are directly navigated into dist folder of artifact
         run: ls
+      - name: Output filename
+        # output stored js filename of build job; needs obj contains all outputs of current jobs
+        run: echo "${{ needs.build.outputs.script-file }}"
       - name: Deploy
         run: echo "Deploying..."
