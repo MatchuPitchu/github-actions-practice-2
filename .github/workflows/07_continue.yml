@@ -15,8 +15,10 @@ jobs:
         with:
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: List the state of node modules
+        if: ${{ steps.cache.outputs.cache-hit != 'true'}}
+        run: npm list
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint code
         run: npm run lint
@@ -31,8 +33,10 @@ jobs:
         with:
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: List the state of node modules
+        if: ${{ steps.cache.outputs.cache-hit != 'true'}}
+        run: npm list
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test code
         # job should continue execution even if step fails
@@ -58,8 +62,10 @@ jobs:
         with:
           path: ~/.npm
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: List the state of node modules
+        if: ${{ steps.cache.outputs.cache-hit != 'true'}}
+        run: npm list
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build website
         id: build-website
