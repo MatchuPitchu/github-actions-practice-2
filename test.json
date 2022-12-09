@@ -1,0 +1,46 @@
+{
+  "numTotalTestSuites": 2,
+  "numPassedTestSuites": 2,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 2,
+  "numPassedTests": 2,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "startTime": 1670588684141,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "",
+            "MainContent"
+          ],
+          "fullName": " MainContent should render a button",
+          "status": "passed",
+          "title": "should render a button",
+          "duration": 65,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "MainContent"
+          ],
+          "fullName": " MainContent should show the help area after clicking the button",
+          "status": "passed",
+          "title": "should show the help area after clicking the button",
+          "duration": 63,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1670588687883,
+      "endTime": 1670588688011,
+      "status": "passed",
+      "message": "",
+      "name": "C:/Users/mflohr/Documents/02 Michael/14.1_github-actions-practice/02_practice-actions-react/src/components/MainContent.test.jsx"
+    }
+  ]
+}
