@@ -2,6 +2,7 @@ name: Matrix Demo
 on: push
 jobs:
   build:
+    continue-on-error: true
     # matrix: run the same job for different configurations (e.g. runners, node versions)
     strategy:
       matrix:
