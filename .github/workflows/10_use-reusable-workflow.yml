@@ -5,7 +5,6 @@ on:
       - main
 jobs:
   deploy:
-    needs: build
     # to re-use workflow, point to path of re-usable workflow
     # here: relative path inside current repo
     # also possible: absolute path to another rep
