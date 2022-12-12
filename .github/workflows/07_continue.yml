@@ -9,16 +9,18 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Get npm cache directory
+          id: npm-cache-dir
+          shell: bash
+          run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
       - name: Cache dependencies
-        id: cache
+        id: npm-cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: ${{ steps.npm-cache-dir.outputs.dir }} # npm cache files are stored in ~/.npm on Posix, or ~\AppData\npm-cache on Windows
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: List the state of node modules
-        if: ${{ steps.cache.outputs.cache-hit != 'true'}}
-        run: npm list
-      - name: Install dependencies
+      - name: Install Dependencies
+        if: ${{ steps.npm-cache.outputs.cache-hit != 'true'}}
         run: npm ci
       - name: Lint code
         run: npm run lint
@@ -27,16 +29,18 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Get npm cache directory
+          id: npm-cache-dir
+          shell: bash
+          run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
       - name: Cache dependencies
-        id: cache
+        id: npm-cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: ${{ steps.npm-cache-dir.outputs.dir }} # npm cache files are stored in ~/.npm on Posix, or ~\AppData\npm-cache on Windows
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: List the state of node modules
-        if: ${{ steps.cache.outputs.cache-hit != 'true'}}
-        run: npm list
-      - name: Install dependencies
+      - name: Install Dependencies
+        if: ${{ steps.npm-cache.outputs.cache-hit != 'true'}}
         run: npm ci
       - name: Test code
         # job should continue execution even if step fails
@@ -56,16 +60,18 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Get npm cache directory
+          id: npm-cache-dir
+          shell: bash
+          run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
       - name: Cache dependencies
-        id: cache
+        id: npm-cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: ${{ steps.npm-cache-dir.outputs.dir }} # npm cache files are stored in ~/.npm on Posix, or ~\AppData\npm-cache on Windows
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: List the state of node modules
-        if: ${{ steps.cache.outputs.cache-hit != 'true'}}
-        run: npm list
-      - name: Install dependencies
+      - name: Install Dependencies
+        if: ${{ steps.npm-cache.outputs.cache-hit != 'true'}}
         run: npm ci
       - name: Build website
         id: build-website
