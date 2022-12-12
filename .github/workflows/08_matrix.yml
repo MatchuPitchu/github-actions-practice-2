@@ -19,7 +19,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install Dependencies
+        if: ${{ steps.cache.outputs.cache-hit != 'true'}}
         run: npm ci
       - name: Build project
         run: npm run build
