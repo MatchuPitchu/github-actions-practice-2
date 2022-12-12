@@ -9,3 +9,6 @@ jobs:
     # here: relative path inside current repo
     # also possible: absolute path to another rep
     uses: ./.github/workflows/09_reusable-workflow.yml
+    with:
+      # provide needed input values to execute re-usable workflow
+      artifact-name: dist-files
