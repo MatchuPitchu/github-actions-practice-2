@@ -1,0 +1,87 @@
+name: Deploy example
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      # Cache dependencies: needs action before dependencies installation
+      # AND inserted in every job that needs the same centrally cached data
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          # define path(s) that includes folder(s) that should be stored in some place
+          # in GitHub cloud across different jobs
+          path: ~/.npm
+          # define key to re-use cached data OR to discard data
+          # hashFiles() creates unique hash value based on a file path passed as argument
+          # idea: whenever package-lock.json was updated, new hash would be different and key would become invalid
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json')}}
+      - name: Install dependencies
+        run: npm ci
+      - name: Test code
+        run: npm run test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    # define that this job will have an output (i.e. value(s))
+    outputs:
+      # custom identifier key, using special 'steps' context object, use your defined id (look below)
+      # to access your value
+      script-file: ${{ steps.publish.outputs.foo }}
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: deps-node-modules-${{ hashFiles('**/package-lock.json')}}
+      - name: Install dependencies
+        run: npm ci
+      - name: Build website
+        run: npm run build
+      - name: Publish JS filename
+        id: publish
+        # Linux Command to find name of JS file in assets folder and print it
+        # to store this file name, add "foo=" before output value (here "{}")
+        # and add >> $GITHUB_OUTPUT after value (targets special file that GitHub creats in your environment
+        # where output key value pair is written to)
+        run: find dist/assets/*.js -type f -execdir echo 'foo={}' >> $GITHUB_OUTPUT ';'
+      # Store output (-> job artifact) using available upload-artifact action
+      # https://github.com/actions/upload-artifact
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          # give artifact a name -> can be downloaded manually in GitHub -> Actions ...
+          name: dist-files
+          # define path of your repo to be stored
+          path: dist
+          # define multiple path (-> use | for multiline instructions) to be stored
+          # path: |
+          #   dist
+          #   package.json
+  deploy:
+    # need to run after build step that artifact is ready to use
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # take artifacts of previous job
+      # actions/download-artifact
+      - name: Get build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          # identifier for which artifact to download, unzip and directly navigate into this folder
+          name: dist-files
+      - name: Output contents
+        # only to show that you are directly navigated into dist folder of artifact
+        run: ls
+      - name: Output filename
+        # output stored js filename of build job; needs obj contains all outputs of current jobs
+        run: echo "${{ needs.build.outputs.script-file }}"
+      - name: Deploy
+        run: echo "Deploying..."
