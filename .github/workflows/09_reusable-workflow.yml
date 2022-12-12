@@ -2,7 +2,7 @@ name: Reusable Deploy
 # make workflow callable for other workflows
 on:
   workflow_call:
-    # add all inputs this workflow needs to execute somewhere else
+    # add inputs this workflow needs to execute somewhere else
     inputs:
       artifact-name:
         description: The name of the deployable artifact files
@@ -11,10 +11,23 @@ on:
         # if 'required: false' -> you can set default value for 'artifact-name' key
         default: dist
         type: string # or number, boolean
-      # ... other keys as you like
+      # ... other keys as you like and need
+    # set outputs of this workflow
+    outputs:
+      result:
+        description: The result olf the deployment operation
+        # use jobs context object
+        value: ${{ jobs.deploy.outputs.outcome }}
 
+    # add secrets this workflow needs to execute
+    # secrets:
+    #   some-secret:
+    #     required: false
 jobs:
   deploy:
+    # define outputs of this job
+    outputs:
+      outcome: ${{ steps.set-result.outputs.step-result }}
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -26,3 +39,6 @@ jobs:
         run: ls
       - name: Output information
         run: echo "Deploying and uploading ..."
+      - name: Set result output
+        id: set-result
+        run: echo "step-result=success" >> $GITHUB_OUTPUT

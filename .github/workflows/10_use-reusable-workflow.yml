@@ -37,3 +37,14 @@ jobs:
     with:
       # provide needed input values to execute re-usable workflow
       artifact-name: dist-files
+    # pass a secret to workflow
+    # secrets:
+    #   some-secret: ${{ secrets.some-secret }}
+  print-deploy-result:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print deploy output
+        # needs context object gives access to job you are depending on
+        # properties 'outputs.results' -> look at reusable-workflow.yml
+        run: echo "${{ needs.deploy.outputs.result }}"
