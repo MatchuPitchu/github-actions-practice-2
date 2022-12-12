@@ -8,6 +8,15 @@ jobs:
       matrix:
         node-version: [14, 16]
         operating-system: [ubuntu-latest, windows-latest]
+        # include specific standalone combination as job environment
+        include:
+          - node-version: 18
+            operating-system: ubuntu-latest
+            # ... you can also add more keys that are NOT defined for matrix above
+        # exclude specific standalone combination
+        exclude:
+          - node-version: 14
+            operating-system: windows-latest
     # use matric context object to access defined matrix values
     # job will then run multiple times in parallel: once per matrix value
     # AND for ALL matrix value combinations, if you have multiple
