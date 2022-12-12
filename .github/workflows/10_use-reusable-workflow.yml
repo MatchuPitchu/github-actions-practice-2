@@ -15,13 +15,13 @@ jobs:
         with:
           path: ~/.npm
           key: dependencies-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        # if: ${{ steps.cache.outputs.cache-hit != 'true'}}
+        run: npm ci
       - name: List the state of node modules
         run: npm list
       - name: List the state of folders
         run: ls
-      - name: Install dependencies
-        # if: ${{ steps.cache.outputs.cache-hit != 'true'}}
-        run: npm ci
       - name: Build website
         id: build-website
         run: npm run build
